@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: Sentiment Analysis API
+  version: 1.0.0
+paths:
+  /jobs:
+    post:
+      summary: Create a new sentiment analysis job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                topic:
+                  type: string
+                sources:
+                  type: array
+                  items:
+                    type: string
+                time_range:
+                  type: string
+      responses:
+        '202':
+          description: Job accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: integer
+  /jobs/{job_id}:
+    get:
+      summary: Get the status and results of a job
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Job status and results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: integer
+                  status:
+                    type: string
+                  results:
+                    type: object
+                    properties:
+                      positive_score:
+                        type: number
+                      negative_score:
+                        type: number
+                      neutral_score:
+                        type: number
+                      net_score:
+                        type: number
+                      word_cloud:
+                        type: object
+                      timeline_data:
+                        type: array
+                        items:
+                          type: object
+        '404':
+          description: Job not found
